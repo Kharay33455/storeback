@@ -580,6 +580,7 @@ def getOtp(request):
     vcode, created = VerificationCode.objects.get_or_create(email = email)
     vcode.code = otp
     vcode.save()
+    
     send_mail("subject", f"Welcome, your verification code is {otp}", "admin@artmarketplace.online", [email], fail_silently = False)
     return Response(status = 200)
 

@@ -105,7 +105,7 @@ EMAIL_PORT = os.getenv("EP")
 EMAIL_HOST_USER = os.getenv("EU")
 EMAIL_HOST_PASSWORD = os.getenv("EPASS")
 EMAIL_USE_TLS = True
-
+EMAIL_USE_SSL = False
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 

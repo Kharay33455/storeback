@@ -1,0 +1,107 @@
+{% extends 'base/main.html' %}
+{% load static %}
+{% block content %}
+<head>
+    <style>
+        a{
+            color: black;
+            text-decoration: none;
+        }
+        a:visited{
+            color: black;
+        }
+
+    </style>
+</head>
+
+<div>
+    <div style="padding-left: 2%; padding-right: 2%;">
+        {% if msg %}
+        <div class="btn btn-success btn-block"  style="text-align: center; color: whitesmoke; background-color: rgb(100, 200, 100);">
+
+        {{product.name}} {{msg}}
+    </div>
+
+        {% endif %}
+        
+        <div style="display: inline-flex; width: 100%;">
+            {% if product.picture1 %}
+            <img style="width: 50%;" src="{{product.picture1.url}}" alt="{{product.name}}">
+            {% endif %}
+            {% if product.picture2 %}
+            <img style="width: 50%; " src="{{product.picture2.url}}" alt="{{product.name}}">
+            {% endif %}
+
+        </div>
+        <h1> {{product.name}} </h1>
+        <small>
+           
+           
+            <a style="text-decoration: underline;" href= "{% url 'store:cat' slug=cat.slug %}" >
+                Similar product: Similar products to {{product.name}}
+            </a>
+
+        </small>
+        <div> {{product.price}} Naira</div>
+        {% if product.in_stock is True %}
+        <div style="color: gray;">
+
+            <small>
+                IN-STOCK
+            </small>
+        </div>
+
+        {% else %}
+        <div style="color: red;">
+            <small>
+                OUT OF STOCK
+            </small>
+        </div>
+        {% endif %}
+        <div>
+            <h2>PRODUCT DETAILS</h2>
+            <div style="margin: 3%; background-color: whitesmoke;">
+                <div>
+                    <b>
+                        Description
+                        <hr>
+
+                        <span style="float: inline-end;">
+                            <a href="{% url 'store:details' catslug=cat.slug prodslug=product.slug %}" >                            See More </a>
+
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-chevron-right" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                    d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708" />
+                            </svg>
+                        </span>
+
+                    </b>
+                    <div>
+                        {{product.details|slice:":500"}}
+                    </div>
+                    <hr>
+                    <hr>
+
+
+
+
+                </div>
+                <div style="width: 100%; height: 300px;">
+                    <div>
+                        <h3>You may also like</h3>
+
+                        <iframe style="width: 100%; height: 300px;" src="{% url 'store:test' catslug=cat.slug %}"
+                            frameborder="0"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+        <a href="{% url 'store:add' go='prod' id=product.id catslug=cat.slug %}">
+    <button class="btn btn-outline-dark btn-block" style="padding: 2%; color: green; position: fixed; bottom: 2%;">
+        ADD TO CART</button>
+        </a>
+</div>
+{% endblock %}

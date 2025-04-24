@@ -1,0 +1,82 @@
+{% extends "base/main.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    {% block content %}
+    <div class="col-lg-12 container">
+
+
+        <div>
+            {% if err %}
+            <p style="color: rgb(150, 10, 10); text-align: center;">
+                {{err}}
+            </p>
+            {% endif %}
+            <div style="position: absolute; width: 80%; top: 10%; left: 10%; margin-top: 10%; padding: 5%; border: solid; border-color: black; background-image: url('/static/base/images/flag.png');"
+                class="text">
+
+                <form method="post" action="{% url 'store:register' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="first_name">First name:</label>
+                        <input type="text" name="firstname" class="form-control" id="first_name"
+                            aria-describedby="first_name" required>
+                        <small id="first_name" class="form-text text-muted">We'll never share your details with anyone
+                            else.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="last_name">Last name:</label>
+                        <input type="text" name="lastname" class="form-control" id="last_name"
+                            aria-describedby="last_name" required>
+                        <small id="last_name" class="form-text text-muted">We'll never share your details with anyone
+                            else.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="user_name">Username:</label>
+                        <input type="text" name="username" class="form-control" id="user_name"
+                            aria-describedby="last_name" required>
+                        <small id="last_name" class="form-text text-muted">We'll never share your details with anyone
+                            else.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Email address:</label>
+                        <input type="email" name="email" class="form-control" id="exampleInputEmail1"
+                            aria-describedby="emailHelp" required>
+                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
+                            else.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Password</label>
+                        <input type="password" name="password1" class="form-control" id="exampleInputPassword1"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword2">Confirm Password</label>
+                        <input type="password" name="password2" class="form-control" id="exampleInputPassword2"
+                            required>
+                    </div>
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" id="exampleCheck1" required>
+                        <label class="form-check-label" for="exampleCheck1">Agree to our terms and conditions</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}
+
+</body>
+
+</html>

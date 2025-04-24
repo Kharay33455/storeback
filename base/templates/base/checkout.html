@@ -1,0 +1,100 @@
+{% extends 'base/main.html' %}
+{% load static %}
+{% block content %}
+     <div class="row">
+		<div class="col-lg-6">
+			<div class="box-element" id="form-wrapper">
+
+				<form action="{% url 'store:change' %}" method="post" >
+					{% csrf_token %}
+			
+					<div id="user-info">
+						<div class="form-field">
+							<input required class="form-control" type="text" name="fname" placeholder="{{customer.first_name}}..">
+						</div>
+						<div class="form-field">
+							<input required class="form-control" type="text" name="lname" placeholder="{{customer.last_name}}..">
+						</div>
+
+						<div class="form-field">
+							<input required class="form-control" type="email" name="email" placeholder="{{customer.user.email}}..">
+						</div>
+						<div>
+							<input id="form-button" class="btn btn-success btn-block" type="submit" value="CHANGE NAME OR EMAIL.">
+
+						</div>
+					</div>
+				</form>
+					
+					<div id="shipping-info">
+						<hr>
+						<p>Shipping Information:</p>
+						<hr>
+						<p>Use Existing:</p>
+						{% if shipping %}
+						{% for ship in shipping %}
+						<ul>
+						<li> <a href="{% url 'store:payment' tfid=ship.id %}"> <button class="btn btn-success" > {{ship.street}}, {{ship.city}} City, {{ship.state}} State.</button> </a> </li>
+					</ul>
+						{% endfor %}
+						{% else %}
+						<button class="btn btn-block" >NO SHIPPING INFORMATION AVAILABLE</button>
+						{% endif %}
+						<hr>
+						Or Create New.<br/>
+						<form id="form" method="post" action="{% url 'store:create-ship' %}">
+							{% csrf_token %}
+						<div class="form-field">
+							<input required class="form-control" type="text" name="address" placeholder="Street Address..">
+						</div>
+						<div class="form-field">
+							<input required class="form-control" type="text" name="lga" placeholder="Local Govt. Area..">
+						</div>
+						<div class="form-field">
+							<input required class="form-control" type="text" name="city" placeholder="City..">
+						</div>
+						<div class="form-field">
+							<input required class="form-control" type="text" name="state" placeholder="State..">
+						</div>
+					
+						<div class="form-field">
+							<input required class="form-control" type="number" name="number" placeholder="Mobile number..">
+						</div>
+					</div>
+
+					<hr>
+					
+					<input id="form-button" class="btn btn-success btn-block" type="submit" value="CREATE NEW SHIPPING INFORMATION.">
+
+				</form>
+			</div>
+
+			<br>
+			<div class="box-element hidden" id="payment-info">
+				<small>Paypal Options</small>
+			</div>
+			
+		</div>
+
+		<div class="col-lg-6">
+			<div class="box-element">
+				<a  class="btn btn-outline-dark" href="{% url 'store:cart' %}">&#x2190; Back to Cart</a>
+				<hr>
+				<h3>Order Summary</h3>
+				<hr>
+				{% for item in items %}
+				<div class="cart-row">
+					{% if item.item.picture2 %}
+					<div style="flex:2"><img class="row-image" src="{{item.item.picture2.url}}"></div>
+					{% endif %}
+					<div style="flex:2">{{item.item.name}}<p></p></div>
+					<div style="flex:1"><p> {{item.item.price}} </p></div>
+					<div style="flex:1"><p>x {{item.quantity}} </p></div>
+				</div>
+				{% endfor %}
+				<h5>Items:   {{customer_cart.total_item}}</h5>
+				<h5>Total:   {{total}} Naira.</h5>
+			</div>
+		</div>
+	</div>
+{% endblock content %}

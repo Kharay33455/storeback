@@ -1,0 +1,13 @@
+{% extends 'base/main.html' %}
+{% load static %}
+{% block content %}
+<div class=" container col-lg-12" style="z-index: 3;" >
+<a  class="btn btn-outline-dark" href="{% url 'store:store' %}">&#x2190; Continue Shopping</a>
+<br>
+
+<p style="font-size: xx-large; font-weight: bolder;">WE ARE PROCESSING YOUR ORDER</p>
+<br>
+<p>No worries...This shouldn't take long. Back to <a href="{% url 'store:store' %}">shopping</a>.</p>
+</div>
+
+{% endblock %}

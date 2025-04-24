@@ -1,0 +1,177 @@
+{% extends 'base/main.html' %}
+{% load static %}
+{% block content %}
+
+<head>
+	<style>
+		@keyframes cat {
+			0% {
+				background-image: url('/static/images/back.png/');
+			}
+
+			14% {
+				background-image: url({{cat.0.background.url}});
+			}
+
+			28% {
+				background-image: url({{cat.1.background.url}});
+			}
+
+			42% {
+				background-image: url({{cat.2.background.url}});
+			}
+
+			56% {
+				background-image: url({{cat.3.background.url}});
+			}
+
+			70% {
+				background-image: url({{cat.4.background.url}});
+			}
+
+			100% {
+				background-image: url('/static/images/back.png/');
+			}
+		}
+
+
+		#cat {
+			color: red;
+			position: relative;
+			display: block;
+			width: 100%;
+			height: 300px;
+			padding-left: 5%;
+			padding-right: 5%;
+			background-image: url('/static/images/back.png/');
+			background-size: cover;
+			background-position: center;
+			animation-name: cat;
+			animation-duration: 10s;
+			animation-iteration-count: infinite;
+
+		}
+
+		a {
+			color: white;
+
+		}
+
+		a::after {
+			color: white;
+		}
+	</style>
+</head>
+<div class="container">
+	{%if msg%}
+	<button class="btn btn-outline-secondary add-btn"
+		style="width: 100%; background-color: rgb(100, 200, 100); color: white;">
+
+		{{product.name}} {{msg}}
+	</button>
+	{% endif %}
+
+	<div class="row">
+
+		<div id="cat">
+			<a href="{% url 'store:category' %}" style="text-decoration: none;">
+
+
+
+				<p
+					style="position: absolute; bottom: 0%; font-style: italic; font-family: Helvetica, Arial, sans-serif; color: whitesmoke; font-size: 50px;">
+					VIEW<br> CATALOUGE...</p>
+			</a>
+
+		</div>
+		<!--categories iframe-->
+		<div style="position: relative; bottom: 0%; left: 0%; width: 100%;">
+			<hr>
+		</div>
+
+		<div class="row"
+			style="width: 100%; background-color: whitesmoke; margin-right: 2%; margin-left: 1%; height: 157px; z-index: 2; overflow-y: hidden;">
+
+			<iframe style=" overflow: hidden; width: 100%; height: 175px;" src="{% url 'store:catframe' %}" frameborder="0"></iframe>
+
+		</div>
+		<!--Line break-->
+
+		<div style="position: relative;  width: 100%;">
+			<hr>
+		</div>
+
+		<div class="row" style="background-color: whitesmoke; z-index: 2; position: relative; width: 100%;">
+			<div>
+				<img width="100%" src="/static/images/make.png" alt="" style="position: absolute; padding-left: 8%;">
+				<p
+					style="padding-left: 10%; position: absolute; font-weight:900; font-size: xx-large; font-family: Helvetica, Arial, sans-serif; font-style: italic; color: black">
+					TOP<br> DEALS
+				</p>
+			</div>
+
+
+		</div>
+
+	
+		<br><br><br><br>
+	</div>
+	<br><br><br><br>
+	<div style="margin-top: 50px; width: 100%;">
+
+		{% for c in cat %}
+		<hr>
+
+		<div  style="width: 100%; height: 300px; z-index: 2; position: relative; padding-left: 1%; background-color: whitesmoke;">
+			<hr>
+			<div style=" background-color: black; color: white; width: 100%;  position: relative; padding-left: 3%;">
+				
+				<span> {{c.name1}} {{c.name2}} </span>
+				<span style="float: right; padding-right: 3%;">
+					<a href=" {% url 'store:cat' slug=c.slug %} ">
+						
+
+						SEE ALL
+					</a>
+				</span>
+
+			</div>
+			<iframe style="width: 100%; height: 300px; padding-left: 3%;"
+				src="{% url 'store:test' catslug=c.slug %}" frameborder="0"></iframe>
+
+		</div>
+		{% endfor %}
+		
+
+
+	</div>
+	<div style="background-color: whitesmoke;">
+		<hr>
+		<h4 style="font-weight: bolder;">OLISA CLOSET - NIGERIA'S NO. 1 ONLINE CLOTHING AND ACCESSORIES STORE.
+		</h4>
+		<h5 style="font-weight: bold;">GET ALL THE CLOTHING APPARRELS YOU WOULD EVER NEED AT OLISA CLOSET.</h5>
+		<p>
+			Olisa Closet is the largest online shopping website in Ikorodu, Lagos State, Nigeria. We offer
+			customers
+			in Nigeria all they need in one clothing online store regradless of their location in the country.
+			On our website website, you can shop from the comfort of
+			your home or during work breaks, make seamless payments and get everything delivered fast without
+			you having to stress or
+			move an inch. Whatever your lore is, we've got something for everyone at OLISA CLOSET.
+
+			<h6 style="font-weight: bold;" >Shop the Latest Fashion and Trendy Outfits Online
+			</h6>
+
+			Browse through our range of fashion items for women, men, and kids on Jumia. Our women's fashion
+			collection includes a diverse selection of clothing such as blouses, pants, and jeans. We also offer
+			a variety of gowns in different lengths and materials to suit your individual style. Additionally,
+			browse through our unique fashion accessories like shoes, bags, jewelry, and sunglasses, all at
+			unbeatable prices you won't find anywhere else.
+
+			For men's fashion, Olisa Closet has an impressive collection of stylish clothing pieces that can make a
+			statement. Find quality men's trousers and shirts at the most affordable prices.
+		</p>
+	</div>
+</div>
+
+{% endblock content %}

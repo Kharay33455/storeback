@@ -1,0 +1,88 @@
+{% extends 'base/main.html' %}
+{% load static %}
+{% block content %}
+<div class="container" >
+    <div>
+        <h1>Search results for "{{search}}" </h1>
+    </div>
+
+    <div>
+        <h2>Categories</h2>
+
+        <div>
+            {% if cats or cats2 %}
+            {% for cat in cats %}
+            <ul>
+                <li>
+                    <div>
+                        <img style="width: 50px; height: 50px;" src="{{cat.background.url}}" alt="{{cat.name1}} background"> {{cat.name2}} {{cat.name2}}
+                    </div> 
+                </li>
+            </ul>
+            {% endfor %}
+            {% for cat in cats2 %}
+            <ul>
+                <li>
+                    <div>
+                        <img style="width: 50px; height: 50px;" src="{{cat.background.url}}" alt="{{cat.name1}} background"> {{cat.name1}} {{cat.name2}}
+                    </div> 
+                </li>
+            </ul>
+            {% endfor %}
+            {% else %}
+            NO CATEGORIES MATCH YOUR SEARCH.
+            {% endif %}
+        </div>
+    </div>
+    <hr>
+
+    <div>
+        <h2>Products</h2>
+    </div>
+
+    <div>
+        {% if products %}
+    {% for product in products %}
+
+    <div class="col-lg-4">
+ 
+
+    <div style="display: inline-flex; width: 100%;">
+        {% if product.picture1 %}
+
+        <img style="float: left; width: 50%;" class="thumbnail" src="{{product.picture1.url}}">
+        {% endif %}
+
+        {% if product.picture2 %}
+
+        <img style="float: right; width: 50%;" class="thumbnail" src="{{product.picture2.url}}">
+        {% endif %}
+
+    </div>
+
+    <div class="box-element product">
+        <h6><strong>{{product.name}}</strong></h6>
+        <hr>
+
+        
+            <a href="{% url 'store:add' id=product.id go='prod' catslug='none' %}">
+        <button class="btn btn-outline-secondary add-btn">
+        Add to Cart</button> 
+    </a>
+    <a class="btn btn-outline-success" href="{% url 'store:product'  prodslug=product.slug catslug='none'%}">
+        View</a>
+        <p style="display: inline-block; float: right; color: rgba(0, 128, 255, 0.6);"><strong>{{product.price}}
+                Naira Only.</strong></p>
+        
+
+    </div>
+
+</div>
+{% endfor %}
+{% else %}
+NO PRODUCTS MATCH YOUR SEARCH.
+{% endif %}
+</div>
+
+</div>
+{% endblock %}

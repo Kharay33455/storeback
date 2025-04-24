@@ -1,0 +1,52 @@
+{% extends 'base/main.html' %}
+{% load static %}
+
+{% block content %}
+{%if msg%}
+<button class="btn btn-outline-secondary add-btn" style="width: 100%; background-color: rgb(100, 200, 100); color: white;">
+
+	{{prod.name}} {{msg}}
+</button>
+{%  endif %}
+<h1>NEW ARRIVALS </h1>
+<div class="row" >
+{% for product in products %}
+<div class="col-lg-4">
+	<div style="display: inline-flex; width: 100%;">
+        {% if product.picture1 %}
+
+        <img style="float: left; width: 50%;" class="thumbnail" src="{{product.picture1.url}}">
+        {% endif %}
+
+        {% if product.picture2 %}
+
+        <img style="float: right; width: 50%;" class="thumbnail" src="{{product.picture2.url}}">
+        {% endif %}
+
+    </div>
+
+    <div class="box-element product">
+        <h6><strong>{{product.name}}</strong></h6>
+        <hr>
+        <!--add to cart functionality-->
+        
+            <a href="{% url 'store:add' id=product.id go='new' catslug='none' %}">
+        <button class="btn btn-outline-secondary add-btn">
+        Add to Cart</button>
+    </a>
+    {% if product.picture1 %}
+        <a class="btn btn-outline-success" href="{% url 'store:product' catslug='none' prodslug=product.slug %}">
+            {% endif %} View</a>
+
+        <p style="display: inline-block; float: right; color: rgba(0, 128, 255, 0.6);"><strong>{{product.price}}
+                Naira Only.</strong></p>
+        
+
+    </div>
+
+</div>
+{% endfor %}
+</div>
+
+
+{% endblock %}

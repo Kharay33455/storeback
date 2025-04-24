@@ -1,0 +1,27 @@
+{% extends 'base/main.html' %}
+{% load static %}
+{% block content %}
+<div>
+    <div>
+        <h1> {{product.name}} </h1>
+        <br>
+        <hr>
+        <div style="display: inline-flex;">
+        {% if product.picture1 %}
+        <img style="width: 50%;" src="{{product.picture1.url}}" alt={{product.name}}>
+        {% endif %}
+        {% if product.picture2 %}
+        <img style="width: 50%;" src="{{product.picture2.url}}" alt={{product.name}}>
+        {% endif %}
+    </div>
+    <div>
+        <h2> About {{product.name}} </h2>
+        {{product.details}}
+    </div>
+    <a href="{% url 'store:add' go='prod' id=product.id catslug=cat.slug %}">
+        <button class="btn btn-outline-dark btn-block" style="padding: 2%; color: green; position: fixed; bottom: 2%;">
+            ADD TO CART</button>
+            </a>
+    </div>
+</div>
+{% endblock %}

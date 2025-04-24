@@ -1,0 +1,122 @@
+{% extends 'base/main.html' %}
+{% load static %}
+
+{% block content %}
+
+
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+
+
+
+/* Create three unequal columns that floats next to each other */
+.column {
+  float: left;
+  padding: 10px;
+  height: 300px; /* Should be removed. Only for demonstration */
+}
+
+/* Left and right column */
+.column.side {
+  width: 25%;
+}
+
+/* Middle column */
+.column.middle {
+  width: 50%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive layout - makes the three columns stack on top of each other instead of next to each other 
+@media (max-width: 600px) {
+  .column.side, .column.middle {
+    width: 100%;
+  }
+}
+*/
+</style>
+</head>
+<body>
+    <div style="padding: 1%;" >
+    <h1>Account Overview</h1>
+    <div class="container">
+      <div class="row">
+          <div class="col-lg-4">
+              <div class="card">
+                  <div class="card-body">
+                      <h2>Welcome {{ customer.first_name }},</h2>
+                      <hr>
+                      <p style="border: solid; border-style: dotted; padding: 2%; border-color: black;">Account Details</p>
+                      <hr>
+                      <p style="border: solid; border-style: dotted; padding: 2%; border-color: black;">
+                          {{ customer.first_name }} {{ customer.last_name }}<br><br>
+                          {{ customer.email }}
+                      </p>
+                  </div>
+              </div>
+          </div>
+  
+          <div class="col-lg-4">
+              <div class="card">
+                  <div class="card-body">
+                      <h1>Orders</h1>
+                      {% if orders %}
+                          {% for order in orders %}
+                              <ul>
+                                  <li>
+                                      <p>{{ order.details }}</p>
+                                      <p>To {{ order.ship.street }}, {{ order.ship.local_government_area }}</p>
+                                      <p>{{ order.ship.city }} {{ order.ship.state }}</p>
+                                      <p>Contact info: {{ order.ship.mobile }}</p>
+                                      <p>On {{ order.time }}</p>
+                                      {% if order.completed is False %}
+                                          <button class="btn btn-secondary" style="background-color: gray; color: white;">Status: Order PROCESSING</button><br>
+                                          <small>Will turn green once order is delivered.</small>
+                                      {% else %}
+                                          <button class="btn btn-success">Status: Completed</button>
+                                      {% endif %}
+                                      <p>Total Cost: {{ order.total }} Naira</p>
+                                      <hr>
+                                  </li>
+                              </ul>
+                          {% endfor %}
+                      {% else %}
+                          <p>No Orders Available</p>
+                      {% endif %}
+                  </div>
+              </div>
+          </div>
+  
+          <div class="col-lg-4">
+              <div class="card">
+                  <div class="card-body">
+                      <h2>Shipping Information</h2>
+                      {% if shippings %}
+                          {% for ship in shippings %}
+                              <ul>
+                                  <li>
+                                      {{ ship.street }}, <br> {{ ship.local_government_area }}, <br>{{ ship.city }} <br>{{ ship.state }} <br> +234{{ ship.mobile }}
+                                  </li>
+                              </ul>
+                          {% endfor %}
+                      {% else %}
+                          <p>No Shipping Information Available.</p>
+                      {% endif %}
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  </body>
+</html>
+
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base/main.html' %}
+{% load static %}
+{%  block content %}
+<br>
+
+<div class="col-lg-12 container">
+    <div style="z-index: 2;">
+        <a  class="btn btn-outline-dark" href="{% url 'store:checkout' %}">&#x2190; Back To Checkout</a>
+        <h1 >{{customer.first_name}}...</h1>
+        <h2> {{ship.street}}, <br> {{ship.local_government_area}}. </h2>
+        <br><br><br>
+       
+
+        <div >
+            <h3> {{total}} Naira only.</h3>
+            Open your mobile app on your mobile phone, dial your bank USSD code or use your debit card to complete your payment next.
+            <p style="color: rgb(50, 100, 200); z-index: 2;" >Please use your personal bank account</p>
+
+
+          <form method="POST" action="https://checkout.flutterwave.com/v3/hosted/pay">
+            <div>
+              Your order is N{{total}}
+            </div>
+            <input type="hidden" name="public_key" value="FLWPUBK_TEST-02b9b5fc6406bd4a41c3ff141cc45e93-X" />
+            <input type="hidden" name="customer[email]" value="{{customer.email}}" />
+            <input type="hidden" name="customer[name]" value="{{customer.name}}" />
+            <input type="hidden" name="tx_ref" value="txref-8023" />
+            <input type="hidden" name="amount" value="{{total}}" />
+            <input type="hidden" name="currency" value="NGN" />
+            <input type="hidden" name="meta[source]" value="docs-html-test" />
+            <input type="hidden" name="redirect_url" value="http://localhost/6/transfer/" />
+
+            <br>
+            <button class="btn btn-success btn-block" type="submit" id="start-payment-button">Pay Now</button>
+          </form>
+          
+
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

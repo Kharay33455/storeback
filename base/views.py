@@ -15,12 +15,12 @@ from django.core.mail import send_mail
 # Create your views here.
 
 def checkAuth(_request):
-    cookies = _request.headers.get("Authorization").split("Token")[1].strip()
     try:
+        cookies = _request.headers.get("Authorization").split("Token")[1].strip()
         token = Token.objects.get(key = cookies)
         user = token.user
         return user
-    except Token.DoesNotExist:
+    except:
         return None
 
 def checkValidOtp(_otp, _email):

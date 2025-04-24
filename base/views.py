@@ -12,6 +12,9 @@ from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from django.core.mail import send_mail
+from datetime import timedelta
+from django.utils import timezone
+
 # Create your views here.
 
 def checkAuth(_request):
@@ -63,6 +66,12 @@ def login_request(request):
             if not validator(username) or not validator(password):
                 return Response({'err' : 'Username or Password incorrect'}, status = 400)
 
+
+            matchEmail = User.objects.filter(email = username).first()
+            
+            if matchEmail:
+                username = matchEmail.username
+
             user = authenticate(request, username = username, password = password)
             
             if user is not None:
@@ -70,7 +79,7 @@ def login_request(request):
                 print(token.key)
                 return Response({'user' : request.user.username, "sessionID" : token.key}, status = 200)
             else:
-                context = {'err':'Invalid username or password'}
+                context = {'err':'Invalid username or Password'}
                 return Response(context , status = 400)
         except (KeyError, Customer.DoesNotExist):
             context = {'err':'User Does Not Exist'}
@@ -576,13 +585,25 @@ def get_csrf(request):
 @api_view(['GET', 'POST'])
 def getOtp(request):
     email = str(request.data['email']).strip()
+    if User.objects.filter(email = email).first():
+        return Response(status = 403)
     otp = str(random.randint(100000, 900000))
     vcode, created = VerificationCode.objects.get_or_create(email = email)
+    time_diff = (timezone.now() - vcode.updated).total_seconds()
+    c_u = (vcode.updated - vcode.created).total_seconds()
+
+    if time_diff < 90 and c_u > 1:
+        return Response({'time' : int(90 - time_diff)},status = 400)
     vcode.code = otp
     vcode.save()
     
-    send_mail("subject", f"Welcome, your verification code is {otp}", "admin@artmarketplace.online", [email], fail_silently = False)
-    return Response(status = 200)
+    #if using front end
+    context = {'code' : vcode.code}
+    return Response(context, status = 200)
+
+    # if using backend
+    #send_mail("subject", f"Welcome, your verification code is {otp}", "admin@artmarketplace.online", [email], fail_silently = False)
+    #return Response(status = 202)
 
 @api_view(['GET'])
 def getCart(request):

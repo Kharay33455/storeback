@@ -249,7 +249,7 @@ def more(request, prodslug):    # more like product
     for _ in cats:
         catsId.append(_.id)
     # filter all objects matching categories
-    products = ProductSerializer(Product.objects.filter(categories__in = catsId).order_by("?"), many = True).data
+    products = ProductSerializer(Product.objects.filter(categories__in = catsId).exclude(slug = prodslug).order_by("?"), many = True).data
     context = {'more' : products}
     return Response(context, status = 200)
 

@@ -14,6 +14,7 @@ from django.contrib.auth import authenticate
 from django.core.mail import send_mail
 from datetime import timedelta
 from django.utils import timezone
+import time
 
 # Create your views here.
 
@@ -27,6 +28,7 @@ def checkAuth(_request):
         return None
 
 def checkValidOtp(_otp, _email):
+    
     try:
         VerificationCode.objects.get(code = _otp, email = _email)
         return True
@@ -34,6 +36,7 @@ def checkValidOtp(_otp, _email):
         return False
 
 def evaluateCart(_cart):
+    
     items = CartItem.objects.filter(cart = _cart)
     itemCount = 0
     totalPrice = 0
@@ -46,6 +49,7 @@ def evaluateCart(_cart):
     return _cart
 
 def validator(_string):
+    
     acceptables = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890-_@.+"
     for _ in _string:
         if _ not in acceptables:
@@ -55,6 +59,7 @@ def validator(_string):
 
 @api_view(["GET", "POST"])
 def login_request(request):
+    
     if request.method == 'POST':
         
         try:
@@ -90,6 +95,7 @@ def login_request(request):
 
 @api_view(['POST'])
 def registration_request(request):
+    
     # get form data
     try:
         first_name = request.POST['firstname'].strip()
@@ -117,6 +123,7 @@ def registration_request(request):
 
 @api_view(['GET'])
 def logout_request(request):
+    
     cookies = request.headers.get("Authorization").split("Token")[1].strip()
     try:
         Token.objects.get(key = cookies).delete()
@@ -127,6 +134,7 @@ def logout_request(request):
 
 @api_view(['GET', 'POST'])
 def store(request):
+    
     
     # gather generic data
     _products = Product.objects.all().order_by("?")
@@ -154,6 +162,7 @@ def store(request):
 
 @api_view(['GET'])
 def category(request):  # category view
+    
     # serialize catalouge
     _cats = Category.objects.all()
     cats = CategorySerializer(_cats, many=True)
@@ -161,6 +170,7 @@ def category(request):  # category view
     return Response(context, status = 200)
 
 def new(request):
+    
     if request.user.is_authenticated:
 
         customer =  Customer.objects.get(user = request.user)
@@ -175,6 +185,7 @@ def new(request):
 
 @api_view(['GET'])
 def cat(request, slug):
+    
     # get cat object and all mathcing products; serailize
     _cat = Category.objects.get(slug = slug)
     _products = Product.objects.filter(categories = _cat)
@@ -193,6 +204,7 @@ def cat(request, slug):
 
 @xframe_options_sameorigin
 def test(request, catslug):
+    
     if request.user.is_authenticated:
         cat = Category.objects.get(slug = catslug)
 
@@ -209,6 +221,7 @@ def test(request, catslug):
 
 @xframe_options_sameorigin
 def catframe(request):
+    
     if request.user.is_authenticated:
 
         cat = Category.objects.all()[:10]
@@ -219,19 +232,15 @@ def catframe(request):
         context = {'cat':cat}
         return render(request, 'base/catframe.html', context)
 
-@api_view(['GET'])
+@api_view(['GET', 'OPTIONS'])
 def product(request, prodslug):
     product = ProductSerializer(Product.objects.get(slug = prodslug)).data
-    if request.user.is_authenticated:
-        customer = Customer.objects.get(user = request.user)
-        context ={'customer': customer, 'product':product}
-        return render (request, 'base/product.html', context)
-    else:
-        context ={ 'product':product}
-        return Response(context, status = 200)
+    context ={ 'product':product}
+    return Response(context, status = 200)
 
 @api_view(["GET"])
 def more(request, prodslug):    # more like product
+    
     # get product and all categories associated
     product = Product.objects.get(slug = prodslug)
     cats = product.categories.all()
@@ -245,6 +254,7 @@ def more(request, prodslug):    # more like product
     return Response(context, status = 200)
 
 def cart(request):
+    
     if request.user.is_authenticated:
 
         customer =  Customer.objects.get(user = request.user)
@@ -271,6 +281,7 @@ def cart(request):
 
 
 def update(request, id, do):
+    
     if request.user.is_authenticated:
         cart = Cart.objects.get(customer = Customer.objects.get(user = request.user))
         item = CartItem.objects.get(id = id)
@@ -324,6 +335,7 @@ def checkout(request):
 
 @api_view(['POST'])
 def add_to_cart(request):
+    
     user = checkAuth(request)
     if not user:
         return Response({'path' : '/auth'} , status = 301)
@@ -365,6 +377,7 @@ def add_to_cart(request):
     return Response({'cartCount' : cart.total_item, "msg" : msg}, status = 200)
 
 def details(request, catslug, prodslug):
+    
     if request.user.is_authenticated:
         customer = Customer.objects.get(user = request.user)
         customer_cart = Cart.objects.get(customer = customer)
@@ -378,6 +391,7 @@ def details(request, catslug, prodslug):
 
 @api_view(['GET'])
 def payment(request, tfid):
+    
     user = checkAuth(request)
     if not user:
         return Response({'path': '/auth'}, status = 301)
@@ -400,6 +414,7 @@ def payment(request, tfid):
 
 @api_view(['GET', 'POST'])
 def has_paid(request, orderId):
+    
     user = checkAuth(request)   # returns nonw for unauth users
     try:
         order = Order.objects.get(order_id = orderId)
@@ -429,6 +444,7 @@ def has_paid(request, orderId):
 
     
 def order_status(request, ship_id, status, transaction_id, tx_ref):
+    
     if request.user.is_authenticated:
         customer = Customer.objects.get(user = request.user)
 
@@ -446,6 +462,7 @@ def order_status(request, ship_id, status, transaction_id, tx_ref):
 
 @api_view(['POST'])
 def create_shipping(request, coe):
+    
     user = checkAuth(request)
     if user:
         customer = Customer.objects.get(user = user)
@@ -472,6 +489,7 @@ def create_shipping(request, coe):
 
 
 def change(request):
+    
     if request.user.is_authenticated:
 
         request.method == 'POST'
@@ -488,6 +506,7 @@ def change(request):
         return HttpResponseRedirect(reverse('store:login'))
 
 def empty(request):
+    
     if request.user.is_authenticated:
 
         customer = Customer.objects.get(user = request.user)
@@ -503,10 +522,11 @@ def empty(request):
 
 @api_view(['GET'])
 def profile(request):
+    
     user = checkAuth(request)
 
     if not user:    # not auth
-        return Response(status = 301)
+        return Response(status = 400)
     
     # generate customer data
     customer = Customer.objects.get(user = user)
@@ -535,6 +555,7 @@ def profile(request):
 
 
 def search(request):
+    
     if request.method == 'POST':
 
         if request.user.is_authenticated:
@@ -559,6 +580,7 @@ def search(request):
 
 @api_view(['GET'])
 def get_global_context(request): #get global context
+    
     user = checkAuth(request)
     
     # general data
@@ -577,13 +599,15 @@ def get_global_context(request): #get global context
     return Response(context, status = 200)
 
 @api_view(['GET'])
-def get_csrf(request):
+def getCSRF(request):
+    
     token = get_token(request)
     context = {'csrfToken' : token}
     return Response(context , status =200)
 
 @api_view(['GET', 'POST'])
 def getOtp(request):
+    
     email = str(request.data['email']).strip()
     if User.objects.filter(email = email).first():
         return Response(status = 403)
@@ -607,6 +631,7 @@ def getOtp(request):
 
 @api_view(['GET'])
 def getCart(request):
+    
     user = checkAuth(request)
     if not user:
         return Response({'path' : "/auth"}, status = 301)
@@ -624,6 +649,7 @@ def getCart(request):
 
 @api_view(['GET'])
 def history(request):
+    
     user = checkAuth(request)
     if not user:
         return Response({'path' : '/auth'}, status = 301)
@@ -638,6 +664,7 @@ def history(request):
 
 @api_view(['GET'])
 def summary(request, order_id):
+    
     user = checkAuth(request)
     if not user:
         return Response({'path' : '/auth'}, status = 301)

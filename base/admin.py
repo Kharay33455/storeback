@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import *
+from rest_framework.authtoken.models import Token
 
 # Register your models here.
 
@@ -19,3 +20,4 @@ admin.site.register(Order)
 admin.site.register(Category)
 admin.site.register(CompanyDetail)
 admin.site.register(OrderItem)
+admin.site.register(Token)

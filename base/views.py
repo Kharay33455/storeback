@@ -123,7 +123,6 @@ def registration_request(request):
 
 @api_view(['GET'])
 def logout_request(request):
-    
     cookies = request.headers.get("Authorization").split("Token")[1].strip()
     try:
         Token.objects.get(key = cookies).delete()
@@ -599,7 +598,7 @@ def get_global_context(request): #get global context
     return Response(context, status = 200)
 
 @api_view(['GET'])
-def getCSRF(request):
+def retrieve(request):
     
     token = get_token(request)
     context = {'csrfToken' : token}

@@ -231,7 +231,7 @@ def catframe(request):
         context = {'cat':cat}
         return render(request, 'base/catframe.html', context)
 
-@api_view(['GET', 'OPTIONS'])
+@api_view(['GET'])
 def product(request, prodslug):
     product = ProductSerializer(Product.objects.get(slug = prodslug)).data
     context ={ 'product':product}
@@ -525,7 +525,7 @@ def profile(request):
     user = checkAuth(request)
 
     if not user:    # not auth
-        return Response(status = 400)
+        return Response(status = 301)
     
     # generate customer data
     customer = Customer.objects.get(user = user)
